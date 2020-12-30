@@ -1,8 +1,7 @@
 
 # [MediaWiki](#mediawiki)
 
-The goal of the challenge is to setup a MediaWiki on a linux (Ubuntu 20.04) server using functional ansible playbook. MediaWiki as web application requires a frontend and backend service and a database. Here apache web server serves as frontend, where the php serves the backend operation which also communicate with a mysql database [1]. Below figure provides an illustration. 
-
+The goal of the challenge is to setup a MediaWiki on a linux (Ubuntu 20.04) server using functional ansible playbook. MediaWiki as web application requires a frontend and backend service and a database. Here apache web server serves as frontend, where the php serves the backend operation which also communicate with a mysql database [1]. 
 
 
 
@@ -32,6 +31,12 @@ The deployment configuration in organized based on the objectives provided in th
 
     `ansible-playbook -i hosts  mediawiki.yaml --ask-vault-pass`
 
+## Roles:
+- `roles/apache/tasks` installs apache server 
+- `roles/common/tasks` installs update and upgrades 
+- `roles/db/tasks` installs mysql 
+- `roles/php/tasks` installs php
+- `roles/web/tasks` run the necessary command for MediaWiki server
 
 ## References:
 1.	https://www.mediawiki.org/wiki/Manual:Running_MediaWiki_on_Debian_or_Ubuntu
