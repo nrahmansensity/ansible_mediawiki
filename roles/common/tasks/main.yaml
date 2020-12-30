@@ -1,0 +1,7 @@
+---
+- name: install update
+  become: yes
+  apt:
+    update_cache: yes
+    upgrade: yes
+    force_apt_get: yes

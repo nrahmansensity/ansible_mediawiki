@@ -1,0 +1,6 @@
+---
+- name: install mysql
+  become: yes
+  apt:
+    name: ['mysql-server','mysql-client']
+    state: latest

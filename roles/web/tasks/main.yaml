@@ -1,0 +1,38 @@
+---
+- name: download MediaWiki
+  become: yes
+  get_url:
+    url: https://releases.wikimedia.org/mediawiki/1.35/mediawiki-1.35.1.tar.gz
+    dest: /etc/mediawiki-1.35.1.tar.gz
+    #mode: '6666'
+
+- name: execute commands
+  become: yes
+  become_method: sudo
+  become_user: root
+  action: shell tar -xzvf /etc/mediawiki-1.35.1.tar.gz
+  #unarchive: src=/etc/mediawiki-1.35.1.tar.gz dest=/home/ubuntu
+
+- name: execute commands 2
+  become: yes
+  become_method: sudo
+  become_user: root
+  action: shell mkdir -p /var/lib/mediawiki && cp -R mediawiki-*/* /var/lib/mediawiki
+
+- name: execute commands for DB
+  become: yes
+  become_method: sudo
+  become_user: root
+  action: shell mysql -u root -ptest -e "CREATE USER IF NOT EXISTS '{{ dbuser }}'@'localhost' IDENTIFIED BY '{{ dbpassword }}';CREATE DATABASE if not exists {{ dbname }};use {{ dbname }};GRANT ALL ON {{ dbname }}.* TO '{{ dbuser }}'@'localhost';"
+
+- name: execute commands ln -s
+  become: yes
+  become_method: sudo
+  become_user: root
+  action: shell ln -sv -f /var/lib/mediawiki /var/www/html/mediawiki
+
+- name: execute installation of mediawiki
+  become: yes
+  become_method: sudo
+  become_user: root
+  action: shell cd /var/lib/mediawiki && php maintenance/install.php --dbname="{{ dbname }}" --dbserver="localhost" --installdbuser="{{ dbuser }}" --installdbpass="{{ dbpassword }}" --dbuser="{{ dbuser }}" --dbpass="{{ dbpassword }}" --server=http://"{{ hostvars[inventory_hostname].inventory_hostname }}" --confpath=/var/lib/mediawiki/ --scriptpath=/mediawiki --lang=en --pass="{{ password }}" "OptimusRide" "{{ username }}"

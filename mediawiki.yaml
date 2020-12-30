@@ -1,0 +1,45 @@
+---
+- name: check service
+  hosts: webservers
+  remote_user: ubuntu
+  become: true
+  tasks:
+    - name: install net-tools
+      apt:
+        name: net-tools
+        state: latest
+
+- name: install upgrade
+  hosts: all
+  remote_user: ubuntu
+  become: true
+  roles:
+    - common
+
+- name: install DB
+  hosts: webservers
+  remote_user: ubuntu
+  become: true
+  roles:
+    - db
+
+- name: install php
+  hosts: webservers
+  remote_user: ubuntu
+  become: true
+  roles:
+    - php
+
+- name: install apache2
+  hosts: webservers
+  remote_user: ubuntu
+  become: true
+  roles:
+    - apache
+
+- name: download mediawiki
+  hosts: webservers
+  remote_user: ubuntu
+  become: true
+  roles:
+    - web

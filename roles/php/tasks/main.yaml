@@ -1,0 +1,7 @@
+---
+- name: install php
+  become: yes
+  apt:
+    name: ['php','php-mysql','libapache2-mod-php','php-xml','php-mbstring']
+    state: latest
+    force_apt_get: yes
